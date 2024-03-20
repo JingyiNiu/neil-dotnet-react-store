@@ -17,6 +17,9 @@ builder.Services.AddDbContext<StoreContext>(opt =>
     opt.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(connectionString));
 });
 
+// Add Cors
+builder.Services.AddCors();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,6 +28,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Cors in Middleware(order is important)
+app.UseCors(opt =>
+{
+    opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+});
 
 app.UseAuthorization();
 
