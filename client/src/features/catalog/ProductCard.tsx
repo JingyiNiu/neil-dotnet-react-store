@@ -4,18 +4,20 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { LoadingButton } from "@mui/lab";
 import agent from "../../app/api/agent";
+import { useStoreContext } from "../../app/context/StoreContext";
 
 interface Props {
   product: Product;
 }
 
 const ProductCard = ({ product }: Props) => {
+  const { setBasket } = useStoreContext();
   const [loading, setLoading] = useState(false);
 
   function handleAddItem(productId: number) {
     setLoading(true);
     agent.Basket.addItem(productId)
-      .then((basket) => console.log(basket))
+      .then((basket) => setBasket(basket))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   }
