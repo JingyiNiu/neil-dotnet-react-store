@@ -20,7 +20,11 @@ const ProductCard = ({ product }: Props) => {
   return (
     <Card>
       <CardHeader
-        avatar={<Avatar sx={{ bgcolor: "secondary.light" }}>{product.name.charAt(0).toUpperCase()}</Avatar>}
+        avatar={
+          <Avatar sx={{ bgcolor: "secondary.light" }}>
+            {product.name ? product.name.charAt(0).toUpperCase() : ""}
+          </Avatar>
+        }
         title={product.name}
         titleTypographyProps={{
           sx: { fontWeight: "bold", color: "primary.main" },
