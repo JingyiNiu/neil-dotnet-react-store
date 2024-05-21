@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import ProductList from "./ProductList";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { fetchFilters, fetchProductsAsync, productSelectors } from "./catalogSlice";
+import { fetchFilters, fetchProductsAsync, productSelectors, setPageNumber, setProductParams } from "./catalogSlice";
 import { Grid, Paper } from "@mui/material";
 import ProductSearch from "./ProductSearch";
 import RadioButtonGroup from "../../app/components/RadioGroupButtons";
@@ -42,14 +42,22 @@ const Catalog = () => {
           <RadioButtonGroup
             selectedValue={productParams.orderBy}
             options={sortOptions}
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) => dispatch(setProductParams({ orderBy: e.target.value }))}
           />
         </Paper>
         <Paper sx={{ p: 2, mb: 2 }}>
-          <CheckboxButtons items={brands} checked={productParams.brands} onChange={(value) => console.log(value)} />
+          <CheckboxButtons
+            items={brands}
+            checked={productParams.brands}
+            onChange={(value: string[]) => dispatch(setProductParams({ brands: value }))}
+          />
         </Paper>
         <Paper sx={{ p: 2 }}>
-          <CheckboxButtons items={types} checked={productParams.types} onChange={(value) => console.log(value)} />
+          <CheckboxButtons
+            items={types}
+            checked={productParams.types}
+            onChange={(value: string[]) => dispatch(setProductParams({ types: value }))}
+          />
         </Paper>
       </Grid>
       <Grid item xs={9}>
@@ -57,7 +65,12 @@ const Catalog = () => {
       </Grid>
       <Grid item xs={3} />
       <Grid item xs={9} sx={{ mb: 2, mt: 2 }}>
-        {metaData && <AppPagination metaData={metaData} onPageChange={(value) => console.log(value)} />}
+        {metaData && (
+          <AppPagination
+            metaData={metaData}
+            onPageChange={(value: number) => dispatch(setPageNumber({ pageNumber: value }))}
+          />
+        )}
       </Grid>
     </Grid>
   );
