@@ -4,29 +4,31 @@ import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/materia
 import { red, teal } from "@mui/material/colors";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import { getCookie } from "../utils/util";
 import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
 import { useAppDispatch } from "../store/configureStore";
 import { setBasket } from "../../features/basket/basketSlice";
+import { fetchCurrentUser } from "../../features/account/accountSlice";
 
 function App() {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const buyerId = getCookie('buyerId');
+    const buyerId = getCookie("buyerId");
+    dispatch(fetchCurrentUser());
     if (buyerId) {
       agent.Basket.get()
-        .then(basket => dispatch(setBasket(basket)))
-        .catch(error => console.log(error))
+        .then((basket) => dispatch(setBasket(basket)))
+        .catch((error) => console.log(error))
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
     }
-  }, [setBasket])
-  
+  }, [dispatch]);
+
   const [darkMode, setDarkMode] = useState(false);
 
   function handleThemeChange() {
@@ -57,11 +59,11 @@ function App() {
     },
   });
 
-  if (loading) return <LoadingComponent message='Initiasing app...' />
+  if (loading) return <LoadingComponent message="Initiasing app..." />;
 
   return (
     <ThemeProvider theme={theme}>
-      <ToastContainer position='bottom-right' hideProgressBar theme='colored'  />
+      <ToastContainer position="bottom-right" hideProgressBar theme="colored" />
       <CssBaseline />
       <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
       <Container>
