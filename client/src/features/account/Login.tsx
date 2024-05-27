@@ -2,12 +2,14 @@ import { LockOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { Container, Paper, Avatar, Typography, Box, TextField, Grid } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import agent from "../../app/api/agent";
 import { FieldValues, useForm } from "react-hook-form";
+import { useAppDispatch } from "../../app/store/configureStore";
+import { signInUser } from "./accountSlice";
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -17,7 +19,7 @@ const Login = () => {
 
   const submitForm = async (data: FieldValues) => {
     try {
-      await agent.Account.login(data);
+      await dispatch(signInUser(data));
       navigate(location.state?.from || "/catalog");
     } catch (error) {
       console.log(error);
