@@ -48,7 +48,7 @@ const ProductCard = ({ product }: Props) => {
           variant="contained"
           disableElevation
           size="small"
-          loading={status.includes("pendingAddItem" + product.id)}
+          loading={status === "pendingAddItem" + product.id}
           onClick={handleAddItem}
         >
           Add to Cart

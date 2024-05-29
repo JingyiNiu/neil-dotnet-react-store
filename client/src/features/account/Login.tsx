@@ -1,10 +1,11 @@
-import { LockOutlined } from "@mui/icons-material";
+import { LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { Container, Paper, Avatar, Typography, Box, TextField, Grid } from "@mui/material";
+import { Container, Paper, Avatar, Typography, Box, TextField, Grid, InputAdornment, IconButton } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FieldValues, useForm } from "react-hook-form";
 import { useAppDispatch } from "../../app/store/configureStore";
 import { signInUser } from "./accountSlice";
+import { useState } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,6 +17,8 @@ const Login = () => {
     handleSubmit,
     formState: { isSubmitting, errors, isValid },
   } = useForm({ mode: "onTouched" });
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const submitForm = async (data: FieldValues) => {
     try {
@@ -56,8 +59,17 @@ const Login = () => {
           margin="normal"
           fullWidth
           label="Password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           autoComplete="current-password"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton aria-label="toggle password visibility" onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <LoadingButton
           loading={isSubmitting}
